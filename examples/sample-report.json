@@ -1,0 +1,178 @@
+{
+  "server": "dev-ops-helper",
+  "summary": {
+    "score": 100,
+    "verdict": "BLOCK",
+    "total_findings": 12,
+    "by_severity": {
+      "critical": 1,
+      "high": 7,
+      "medium": 4,
+      "low": 0
+    },
+    "by_rule": {
+      "R01": {
+        "count": 1,
+        "severity": "critical"
+      },
+      "R02": {
+        "count": 3,
+        "severity": "high"
+      },
+      "R03": {
+        "count": 1,
+        "severity": "high"
+      },
+      "R04": {
+        "count": 1,
+        "severity": "high"
+      },
+      "R05": {
+        "count": 1,
+        "severity": "high"
+      },
+      "R06": {
+        "count": 1,
+        "severity": "high"
+      },
+      "R07": {
+        "count": 1,
+        "severity": "medium"
+      },
+      "R08": {
+        "count": 2,
+        "severity": "medium"
+      },
+      "R09": {
+        "count": 1,
+        "severity": "medium"
+      }
+    }
+  },
+  "findings": [
+    {
+      "rule": "R06",
+      "severity": "high",
+      "target": "dev-ops-helper",
+      "message": "remote transport (streamable-http) with no authentication"
+    },
+    {
+      "rule": "R01",
+      "severity": "critical",
+      "target": "run_command",
+      "message": "tool can execute shell commands"
+    },
+    {
+      "rule": "R02",
+      "severity": "high",
+      "target": "run_command",
+      "message": "destructive tool has no confirmation parameter"
+    },
+    {
+      "rule": "R02",
+      "severity": "high",
+      "target": "write_file",
+      "message": "destructive tool has no confirmation parameter"
+    },
+    {
+      "rule": "R03",
+      "severity": "high",
+      "target": "write_file",
+      "message": "file-write tool with no server-level allowed_paths"
+    },
+    {
+      "rule": "R02",
+      "severity": "high",
+      "target": "delete_file",
+      "message": "destructive tool has no confirmation parameter"
+    },
+    {
+      "rule": "R09",
+      "severity": "medium",
+      "target": "read_file",
+      "message": "file-read tool accepts an arbitrary path with no server-level allowed_paths"
+    },
+    {
+      "rule": "R04",
+      "severity": "high",
+      "target": "fetch_url",
+      "message": "tool reaches the network or the open world"
+    },
+    {
+      "rule": "R05",
+      "severity": "high",
+      "target": "get_env",
+      "message": "tool name, description or parameters mention secrets or credentials"
+    },
+    {
+      "rule": "R07",
+      "severity": "medium",
+      "target": "get_env",
+      "message": "no MCP safety annotations (readOnlyHint, destructiveHint, idempotentHint, openWorldHint)"
+    },
+    {
+      "rule": "R08",
+      "severity": "medium",
+      "target": "env-file",
+      "message": "resource exposes sensitive data: file:///home/user/.env"
+    },
+    {
+      "rule": "R08",
+      "severity": "medium",
+      "target": "passwd",
+      "message": "resource exposes sensitive data: file:///etc/passwd"
+    }
+  ],
+  "rules": {
+    "R01": {
+      "severity": "critical",
+      "title": "Shell / command execution tool",
+      "advice": "Remove the tool, or run it in a sandbox with an allow-list of commands and no shell metacharacters."
+    },
+    "R02": {
+      "severity": "high",
+      "title": "Destructive tool with no confirmation parameter",
+      "advice": "Add a required confirmation parameter (for example 'confirm': true) and log every destructive call."
+    },
+    "R03": {
+      "severity": "high",
+      "title": "File-write tool with no declared allowed paths",
+      "advice": "Declare 'allowed_paths' on the server and reject writes outside them."
+    },
+    "R04": {
+      "severity": "high",
+      "title": "Network egress / open-world tool",
+      "advice": "Restrict destinations to an allow-list of hosts and log every outbound request."
+    },
+    "R05": {
+      "severity": "high",
+      "title": "Secret / credential access",
+      "advice": "Never expose environment variables, tokens or passwords through tools or resources; use a secrets manager."
+    },
+    "R06": {
+      "severity": "high",
+      "title": "Remote transport with no authentication",
+      "advice": "Add authentication (API key or OAuth) before exposing the server over SSE or streamable HTTP."
+    },
+    "R07": {
+      "severity": "medium",
+      "title": "Tool with no safety annotations",
+      "advice": "Set the MCP annotations (readOnlyHint, destructiveHint, idempotentHint, openWorldHint) on every tool."
+    },
+    "R08": {
+      "severity": "medium",
+      "title": "Sensitive resource exposed",
+      "advice": "Remove credentials, config files and environment data from the resource list."
+    },
+    "R09": {
+      "severity": "medium",
+      "title": "Unscoped file read (arbitrary path, no allowed paths)",
+      "advice": "Declare 'allowed_paths' and reject reads outside them."
+    },
+    "R10": {
+      "severity": "low",
+      "title": "Missing server metadata",
+      "advice": "Give the server a name, version and description so it can be identified and reviewed."
+    }
+  }
+}
